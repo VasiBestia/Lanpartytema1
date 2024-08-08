@@ -1,5 +1,5 @@
 build:
-	gcc main.c liste.h -o main
+	gcc main.c liste.h cozistive.h -o main
 
 clean: 
 	del /f main.exe

@@ -7,13 +7,14 @@
 typedef struct Player {
     char *firstName;
     char *secondName;
-    int points;
+    float points;
 } Player;
 
 typedef struct Team {
     int numar_coechipieri;
     char *nume_echipa;
     Player *player;  
+    float total;
 } Team;
 
 typedef struct Node {
@@ -25,7 +26,14 @@ typedef struct Node {
 void ListCreate(Node **head);
 void AddAtBeginning(Node **head, int numar_coechipieri, char *nume_echipa,FILE *intrare);
 void printListReverse(Node **head,FILE *iesire);
-void StackPrint(Node **head,FILE *iesire);
+void printListReverseupdt(Node **head);
 void FreeStack(Node *head);
+void calculpunctaje(float p[],Node *head,int numar_echipe);
+void swap(float *a, float *b) ;
+int partition(float arr[], int low, int high);
+void quicksort(float arr[], int low, int high);
+int powerof2max(int numar_echipe);
+void deleteNode(Node **head, float points);
+void freeTeam(Team *team);
 
 #endif // LISTE_H
