@@ -2,6 +2,8 @@
 #include "liste.c"
 #include "cozistive.h"
 #include "cozistive.c"
+#include "arbori.h"
+#include "arbori.c"
 
 int main(int argc, char *argv[]) {
     Node *head;
@@ -66,11 +68,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
     Queue *q = createQueue();
     Nodul *winnerstop, *loserstop;
     StackCreate(&winnerstop);
     StackCreate(&loserstop);
+    Nodul *winnerstopcopy;
+    StackCreate(&winnerstopcopy);
+
 
     
     current = head;  
@@ -82,6 +86,7 @@ int main(int argc, char *argv[]) {
     int index=1;
     printf(" ---Round No:%d\n",index);
     runde(q);
+    kickoff/=2;
 
     Nodul *temp = q->front;
     while (temp != NULL && temp->next != NULL) {
@@ -120,22 +125,39 @@ int main(int argc, char *argv[]) {
          enQueue(q, temp->team_name, temp->summary);
         temp = temp->next;
     }
-     
     index++; 
     printf(" ---Round No:%d\n",index);
     runde(q);
+    kickoff/=2;
 
     freeStack(&loserstop);
     freeStack(&winnerstop);
 
     while(kickoff>8){
-        index++;
-        printf(" ---Round No:%d\n",index);
-        etape(q,winnerstop,loserstop);
+        etape2(q,&winnerstopcopy,index);
         kickoff/=2;
     }
 
+    Nod *root;
+    Nod *rootAVL;
+    createTree(&root);
+    
+    root=newNode("podium",0.0);
+    Nodul*aux=winnerstopcopy;
+
+    while(aux!=NULL){
+        insert(root,aux->team_name,aux->summary);
+        aux=aux->next;
+    }
+
+    if(isEmptyTree(root))
+    printf("\n---e gol---\n");
+    else
+    levelOrderTraversal(root);
+
     FreeStack(head);
+    freeTree(root);
+    freeTree(rootAVL);
     fclose(intrare);
     fclose(iesire);
 

@@ -29,6 +29,7 @@ void push ( Nodul ** top ,char *team_name,float points);
 void freeStack(Nodul **top);
 void printStack(Nodul **top);
 int isEmptyStack(Nodul *q);
-void etape(Queue *q, Nodul *winnerstop, Nodul *loserstop);
+Nodul* copyStack(Nodul* original);
+void etape2(Queue *q, Nodul **winnerstopcopy, int index);
 
 #endif

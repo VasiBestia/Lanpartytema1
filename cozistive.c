@@ -77,16 +77,6 @@ int isEmptyStack(Nodul *top){
      return (top == NULL);
 }
 
-/*Nodul *pop( Nodul ** top) {
-if ( isEmptyStack (* top )) return;
-Nodul * temp =(* top );
-
-Nodul *aux=temp;
-// sterge elementul din varf
-*top =(* top)-> next ;
-free ( temp );
-return aux ;
-}*/
 
 void push(Nodul **top, char *team_name, float points) {
     Nodul *newNode = (Nodul *)malloc(sizeof(Nodul));
@@ -131,7 +121,44 @@ void printStack(Nodul **top){
 	 printf("\n");
 }
 
-void etape(Queue *q, Nodul *winnerstop, Nodul *loserstop) {
+Nodul* copyStack(Nodul* original) {
+    if (original == NULL) {
+        return NULL;
+    }
+
+    Nodul *copy = NULL;
+    Nodul *temp = original;
+    Nodul *last = NULL;
+
+    // Creăm primul nod
+    copy = (Nodul*)malloc(sizeof(Nodul));
+    copy->team_name = strdup(temp->team_name);
+    copy->summary = temp->summary;
+    copy->next = NULL;
+    last = copy;
+    temp = temp->next;
+
+    // Iterăm restul elementelor și le copiem
+    while (temp != NULL) {
+        Nodul *newNode = (Nodul*)malloc(sizeof(Nodul));
+        newNode->team_name = strdup(temp->team_name);
+        newNode->summary = temp->summary;
+        newNode->next = NULL;
+
+        last->next = newNode;
+        last = newNode;
+        temp = temp->next;
+    }
+
+    return copy;
+}
+
+void etape2(Queue *q, Nodul **winnerstopcopy, int index) {
+    Nodul *winnerstop = NULL;
+    Nodul *loserstop = NULL;
+
+    StackCreate(&loserstop);
+    StackCreate(&winnerstop);
 
     Nodul *temp = q->front;
     while (temp != NULL && temp->next != NULL) {
@@ -157,27 +184,65 @@ void etape(Queue *q, Nodul *winnerstop, Nodul *loserstop) {
         }
     }
 
-    printf("castig:\n");
-    printStack(&winnerstop);
-    printf("pierz:\n");
+    // Aici, copiem winnerstop în winnerstopcopy înainte de a face alte modificări
+    *winnerstopcopy = copyStack(winnerstop);
+
+    printf("losers:\n");
     printStack(&loserstop);
+    printf("winners:\n");
+    printStack(&winnerstop);
 
     freeQueue(q);
-    q=createQueue();
+    q = createQueue();
 
-     temp=winnerstop;
-    while(temp!=NULL){
-         enQueue(q, temp->team_name, temp->summary);
+    temp = winnerstop;
+    while (temp != NULL) {
+        enQueue(q, temp->team_name, temp->summary);
         temp = temp->next;
     }
 
-    
+    index++;
+    printf(" ---Round No:%d\n", index);
     runde(q);
 
     freeStack(&loserstop);
     freeStack(&winnerstop);
 
-    StackCreate(&winnerstop);
     StackCreate(&loserstop);
+    StackCreate(&winnerstop);
 
+    temp = q->front;
+    while (temp != NULL && temp->next != NULL) {
+        if (temp->summary < temp->next->summary) {
+            push(&loserstop, temp->team_name, temp->summary);
+            temp->next->summary += 1.00;
+            push(&winnerstop, temp->next->team_name, temp->next->summary);
+        } else if (temp->summary > temp->next->summary) {
+            push(&loserstop, temp->next->team_name, temp->next->summary);
+            temp->summary += 1.00;
+            push(&winnerstop, temp->team_name, temp->summary);
+        } else {
+            push(&loserstop, temp->next->team_name, temp->next->summary);
+            temp->summary += 1.00;
+            push(&winnerstop, temp->team_name, temp->summary);
+        }
+
+        temp = temp->next;
+        if (temp != NULL && temp->next != NULL) {
+            temp = temp->next;
+        } else {
+            break;
+        }
+    }
+
+    printf("losers:\n");
+    printStack(&loserstop);
+    printf("winners:\n");
+    printStack(&winnerstop);
+
+    // Copiem din nou winnerstop în winnerstopcopy pentru a păstra starea finală
+    *winnerstopcopy = copyStack(winnerstop);
+
+    freeStack(&loserstop);
+    freeStack(&winnerstop);
 }
