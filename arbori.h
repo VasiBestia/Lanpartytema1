@@ -5,27 +5,23 @@
 #include<stdlib.h>
 
 typedef struct Nod {
-    char *team_name;
+    char* team;
     float summary;
+    struct Nod* left;
+    struct Nod* right;
     int height;
-    struct Nod *left;
-    struct Nod *right;
 } Nod;
 
-void createTree(Nod **root);
-Nod * newNode (char *team_name,float summary);
-Nod* insert(Nod* node, char *team_name,float key);
-int height ( Nod* root );
-void printLevel ( Nod * root , int level );
-void levelOrderTraversal ( Nod * root );
-void freeTree(Nod *root);
-int isEmptyTree(Nod *root);
-int nodeHeight ( Nod * root );
-int max (int a,int b);
-Nod * LeftRotation ( Nod *z);
-Nod * RightRotation ( Nod *z);
-Nod * RLRotation ( Nod *Z);
-Nod * LRRotation ( Nod *Z);
-Nod * insertAVL ( Nod * node , char *team_name,float key);
+
+Nod* newNode(char* team,float summary);
+int getHeight(Nod* node);
+int max(int a, int b);
+int getBalance(Nod* node);
+Nod* rightRotate(Nod* y);
+Nod * leftRotate(Nod* x) ;
+Nod* insertNode(Nod* node, char* team,float summary) ;
+void printLevel2Teams(Nod* root);
+void FreeTree(Nod* root);
+void inOrderTraversal(Nod* root);
 
 #endif

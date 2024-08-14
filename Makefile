@@ -1,5 +1,5 @@
 build:
-	gcc main.c liste.h cozistive.h arbori.h -o main
+	gcc -Wall main.c liste.h cozistive.h arbori.h -o lanParty 
 
 clean: 
-	del /f main.exe
+	rm -f lanParty

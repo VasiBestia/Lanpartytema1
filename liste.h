@@ -24,9 +24,8 @@ typedef struct Node {
 
 // Function prototypes
 void ListCreate(Node **head);
-void AddAtBeginning(Node **head, int numar_coechipieri, char *nume_echipa,FILE *intrare);
-void printListReverse(Node **head,FILE *iesire);
-void printListReverseupdt(Node **head);
+void AddAtTheEnd(Node **head, int numar_coechipieri, char *nume_echipa,FILE *intrare);
+void printList(Node **head);
 void FreeStack(Node *head);
 void calculpunctaje(float p[],Node *head,int numar_echipe);
 void swap(float *a, float *b) ;
